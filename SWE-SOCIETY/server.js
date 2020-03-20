@@ -40,6 +40,32 @@ app.use(
 
 app.set("view engine", "ejs");
 
+const memberSchema = new mongoose.Schema({
+  reg_no: {
+    type: Number,
+    unique: true,
+  },
+  username: String,
+  password: String,
+  email: String,
+  birth_date: Date,
+  pro_pic: String,
+  phone: String,
+  batch: String,
+  skills: String,
+  facebook: String,
+  linkedin: String,
+  github: String,
+  isgraduated: Boolean,
+  isMailVarified: Boolean,
+  isApproved: Boolean,
+  isAlumni: Boolean,
+  created_on: Date,
+  last_login: Date
+});
+
+const Member = mongoose.model('Member', memberSchema);
+
 app.get("/", function(req, res) {
   res.render("login");
 });
@@ -47,9 +73,7 @@ app.get("/", function(req, res) {
 app.get("/home", function(req, res) {
   res.render("index");
 });
-app.get("/chul", function(req, res) {
-  res.render("chul");
-});
+
 app.get("/batch", function(req, res) {
   res.render("batch");
 });
@@ -58,31 +82,7 @@ app.get("/login", function(req, res) {
 });
 
 app.post("/login", function(req, res) {
-  session = req.session;
-
-  const query = {
-    // give the query a unique name
-    name: 'fetch-user',
-    text: 'SELECT *FROM public."members" WHERE email = $1 and pass = $2',
-     values: [req.body.email, req.body.password],
-  }
-  // res.cookie("username", req.body.username);
-  // res.cookie("password", req.body.password);
-  session.username = req.body.email;
-  session.password = req.body.password;
-  
-  client.query(query, (err, res) => {
-    if (err) {
-      console.log(err.stack);
-    } else {
-      console.log('Successfully authenticated');
-      session.isAuthenticated = 'yes';
-      data = res.rows[0];
-      console.log(data.reg_no);
-      session.reg_no = data.reg_no
-    }
-  });
-
+  console.log(req.body);
   res.redirect("me");
  
 });
@@ -94,13 +94,7 @@ app.get("/about", function(req, res) {
 });
 app.get("/me", function(req, res) {
 
-  if(session.isAuthenticated){
-    res.render("me", {myinfo: data});
-  }
-  else{
-    res.redirect('login');
-  }
-  
+    res.render("me")
 });
 
 app.get("/logout", function(req, res) {
@@ -122,20 +116,6 @@ app.get("/register", function(req, res) {
 
 app.get("/blog", function(req, res) {
   
-  let query = {
-    text: 'SELECT *FROM public."blog" LEFT JOIN members ON members.reg_no = blog.user_id',
-  }
-  client.query(query, (err, res) => {
-    if (err) {
-      console.log(err.stack);
-    } else {
-      // console.log(res.rows[0]);
-      data = res.rows;
-      
-    }
-  });
-
-
    res.render("blog", {blog: data});
   
 });
