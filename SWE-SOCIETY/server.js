@@ -3,11 +3,11 @@ var app = express();
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const sessions = require("express-session");
 const fs = require('fs');
 const formidabel = require("formidable");
-
+const Member = require('./models/member');
+const Blog = require('./models/blog');
 dotenv.config({path: './config.env'});
 const DB = process.env.DATABASE.replace('<password>', process.env.DATABASE_PASSWORD);
 mongoose.connect(DB, {
@@ -21,108 +21,126 @@ mongoose.connect(DB, {
 
 var session;
 var data;
+var user
 
 app.use("/public", express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 
 app.use(
   sessions({
-    secret: '98rw-0di9fw89e-09r8=w-ed-089f8s09d8f=w879464werwe',
+    secret: 'secret-key',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
   })
 );
 
-
-
 app.set("view engine", "ejs");
-
-const memberSchema = new mongoose.Schema({
-  reg_no: {
-    type: Number,
-    unique: true,
-  },
-  username: String,
-  password: String,
-  email: String,
-  birth_date: Date,
-  pro_pic: String,
-  phone: String,
-  batch: String,
-  skills: String,
-  facebook: String,
-  linkedin: String,
-  github: String,
-  isgraduated: Boolean,
-  isMailVarified: Boolean,
-  isApproved: Boolean,
-  isAlumni: Boolean,
-  created_on: Date,
-  last_login: Date
-});
-
-const Member = mongoose.model('Member', memberSchema);
 
 app.get("/", function(req, res) {
   res.render("login");
 });
 
-app.get("/home", function(req, res) {
+const home = app.get("/home", function(req, res) {
   res.render("index");
 });
 
-app.get("/batch", function(req, res) {
+const batch = app.get("/batch", function(req, res) {
   res.render("batch");
 });
-app.get("/login", function(req, res) {
+
+const loginPage = app.get("/login", function(req, res) {
   res.render("login");
 });
 
-app.post("/login", function(req, res) {
-  console.log(req.body);
-  res.redirect("me");
+const login =  app.post("/login", async function(req, res) {
+
+  try {
+
+    const user = await Member.find(req.body);
+     
+    if(user){
+      
+      req.session.userId = user.reg_no;
+      res.redirect("home");
+      
+    }
+  
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: {
+        error
+      }
+    });
+  }
+  
  
 });
-app.get("/committe", function(req, res) {
-  res.render("committe");
-});
-app.get("/about", function(req, res) {
+
+const about = app.get("/about", function(req, res) {
   res.render("about");
 });
-app.get("/me", function(req, res) {
+const me = app.get("/me", function(req, res) {
 
-    res.render("me")
+    res.render("me", {myinfo: user});
 });
 
-app.get("/logout", function(req, res) {
+const logout = app.get("/logout", function(req, res) {
   req.session.destroy(function(error) {
     console.log(error);
     res.render("login");
   });
 });
 
-app.get("/allCommittee", function(req, res) {
+const committe = app.get("/committe", function(req, res) {
+  res.render("committe");
+});
+
+const allcommittee = app.get("/allCommittee", function(req, res) {
   res.render("allCommittee");
 });
-app.get("/bal", function(req, res) {
-  res.render("bal.ejs");
-});
-app.get("/register", function(req, res) {
+
+const nav = app.get('/nav', function(req, res){
+  res.render('./partials/nav');
+})
+
+const register = app.get("/register", function(req, res) {
   res.render("register.ejs");
 });
 
-app.get("/blog", function(req, res) {
-  
-   res.render("blog", {blog: data});
+const feeds =app.get('/feeds', function(req, res){
+  res.render("feeds");
+});
+
+const blog = app.get("/blog", async function(req, res) {
+
+  try {
+    const blogs = await Blog.find();
+    console.log(blogs);
+    // res.status(200).json({
+    //   status: 'success',
+    //   results: blogs.length,
+    //   data: {
+    //   blogs
+    //   }
+    // });
+    res.render("blog", {blog: blogs});
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: {
+        error
+      }
+    });
+  }
+
   
 });
 
-app.post("/blog", function(req, res) {
+const createBlog = app.post("/blog", async function(req, res) {
 
-  console.log(req.body);
   let formData = {};
 
   const prefixPath = "/public/blog/";
@@ -133,6 +151,7 @@ app.post("/blog", function(req, res) {
       const randPath = file.path.split("_")[1] + "." + file.type.split("/")[1];
       file.path = __dirname + prefixPath + randPath;
       filePath += randPath;
+      console.log('FilePath: '+filePath);
     })
     .on("file", (name, file) => {
       formData[name] = filePath;
@@ -140,46 +159,42 @@ app.post("/blog", function(req, res) {
     })
 
   .on('field', (fieldName, fieldValue) => {
-    console.log(fieldName+': '+fieldValue);
     formData[fieldName] = fieldValue;
     })
      
-  .once('end', () => {
+  .once('end', async() => {
+   formData['userId'] = user.reg_no;
 
-      console.log(formData.title);
-      const query = {
-        text: 'INSERT INTO public."blog"(user_id, title, blog_content, postdate, image, isapproved) VALUES($1, $2, $3, $4, $5, $6)',
-        values: [session.reg_no, formData.title, formData.blog_content, new Date(), filePath, false],
-      }
-      client.query(query, (err, res) => {
-        if (err) {
-          console.log(err.stack);
-        } else {
-          console.log("Successfully update");
-        }
-      });
+   try {
+
+    console.log(formData);
+    const newBlog = await Blog.create(formData);
+    res.redirect("blog");
+  } catch (error) {
+    res.status(400).json({
+    status: 'fail',
+    message: error
+
+    });
+  }
     });
   
-
-
-  res.redirect("blog");
 });
 
-app.post("/register", function(req, res) {
-  console.log(req.body);
-  console.log(new Date());
-  const query = {
-    text: 'INSERT INTO public."members"(reg_no, username, pass, email) VALUES($1, $2, $3, $4)',
-    values: [req.body.reg, req.body.username, req.body.password, req.body.email],
+
+const createMember = app.post("/register", async function(req, res) {
+  try{
+    const newMember = await Member.create(req.body);
+    res.redirect("home");
+  }catch( err){
+    res.status(400).json({
+      status: 'fail',
+      message: err
+
+    });
   }
-  client.query(query, (err, res) => {
-    if (err) {
-      console.log(err.stack);
-    } else {
-      console.log(res.rows[1]);
-    }
-  });
-  res.redirect("home");
+  
 });
+
 
 app.listen(8000);

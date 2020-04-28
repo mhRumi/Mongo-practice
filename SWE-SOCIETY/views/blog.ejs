@@ -1,4 +1,4 @@
-<!-- <%- include ('partials/nav.ejs') %> -->
+<%- include ('partials/nav.ejs') %>
 <!DOCTYPE html>
 <html>
 <title></title>
@@ -19,7 +19,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 
 
 <!-- Page Container -->
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:1%">    
   <!-- The Grid -->
   <div class="w3-row">
     <!-- Left Column -->
@@ -110,7 +110,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     </div>
     
     <!-- Middle Column -->
-    <div class="w3-col m7" style="max-height: 800px;overflow-y:scroll">
+    <div class="w3-col m7" style="max-height: 850px;overflow-y:scroll">
     
       <div class="w3-row-padding">
         <div class="w3-col m12">
@@ -126,30 +126,13 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
           </div>
         </div>
       </div>
-      
-      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-        <img src="/public/faculty/faculty pic/rafi_sir.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-        <span class="w3-right w3-opacity">1 min</span>
-        <h4>John Doe</h4><br>
-        <hr class="w3-clear">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          <div class="w3-row-padding" style="margin:0 -16px">
-            <div class="w3-half">
-              <img src="/public/image/post_1.jpg" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
-            </div>
-            <div class="w3-half">
-              <img src="/public/image/post_1.jpg" style="width:100%" alt="Nature" class="w3-margin-bottom">
-          </div>
-        </div>
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button> 
-        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button> 
-      </div>
+    
 
       <% for(var b of blog){ %>
       <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
         <img src="/public/faculty/faculty pic/rafi_sir.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <span class="w3-right w3-opacity"></span>
-        <h4><%= b.username %></h4>
+        <h4><%= b.userId %></h4>
         <p class="w3-opacity"><%= b.postdate %></p>
         <hr class="w3-clear">
         <h5><%= b.title %></h5>
@@ -216,7 +199,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 <br>
 
 <!-- Footer -->
-<%- include ('partials/footer.ejs') %>
+<!-- <%- include ('partials/footer.ejs') %> -->
  
 <script>
 // Accordion

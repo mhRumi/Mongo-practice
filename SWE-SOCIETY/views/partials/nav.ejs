@@ -1,47 +1,91 @@
-<nav
-  class="navbar navbar-expand-md fixed-top bg-dark navbar-default"
-  id="mainNav"
->
-  <div class="container">
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <title>SWE SOCIETY, SUST</title>
+  <style>
+    .btn {
+      color: white;
+      font-family: Georgia;
+    }
+
+    .btn:hover {
+      background-color: white;
+
+    }
+  </style>
+</head>
+
+<body style="width: 99%;">
+  <nav class="navbar navbar-expand-lg bg-dark" style="width:101%">
     <a class="navbar-brand" href="home">
-      <img src="/public/image/logo1.png" width="100px" />
+      <img src="/public/image/logo1.png" alt="" style="height: 15%;width: 15%; vertical-align:middle;margin-left:5%">
     </a>
-    <button
-      class="navbar-toggler collapsed"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarDefault"
-      aria-controls="navbarDefault"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="fa fa-bars" style="color: blanchedalmond;"></span>
+    
+    <a style="font-family:Georgia;" class="navbar-brand" href="home">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div
-      class="navbar-collapse collapse justify-content-end"
-      id="navbarDefault"
-    >
-      <ul class="navbar-nav" id="nav1">
-        <li class="nav-item ">
-          <a class="nav-link" id="navlinkhover" href="home">HOME</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a style="font-family:Georgia;" class="btn" class="nav-link" href="blog">Blog <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="navlinkhover" href="feeds">FEEDS</a>
+          <a style="font-family:Georgia;" class="btn" class="nav-link" href="feeds">Feeds</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " id="navlinkhover" href="batch">BATCH</a>
+          <a style="font-family:Georgia;" class="btn" class="nav-link" href="#">Galary</a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link " id="navlinkhover" href="committe">COMMITTEES</a>
+          <a style="font-family:Georgia;" class="nav-link" href="allCommittee" tabindex="-1">Committies</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" id="navlinkhover" href="about">ABOUT</a>
+
+        <a class='fab fa-facebook-messenger' style='font-size:100%;margin-top:3%;margin-left:5%' href="{% url 'messenger' %}"></a>
+
+        <li class="nav-item dropdown">
+          <a style="color: white;font-family:Georgia;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+            role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="batch">Members</a>
+            <a class="dropdown-item" href="#">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="logout">Logout </a>
+          </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" id="navlinkhover" href="login">LOGIN</a>
-        </li>
+
       </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button style="color: black;" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
     </div>
-  </div>
-</nav>
+  </nav>
+ 
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
